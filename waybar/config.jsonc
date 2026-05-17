@@ -1,0 +1,52 @@
+{
+	"layer": "top",
+	"position": "top",
+
+	"modules-left": [
+		"hyprland/workspaces",
+		"custom/media"
+	],
+
+	"modules-center": [
+		"clock"
+	],
+
+	"modules-right": [
+		"pulseaudio",
+		"battery",
+		"memory",
+		"network"
+	],
+
+	"hyprland/workspaces": {
+		"format": "{name}"
+	},
+
+	"clock": {
+		"format": "{:%H:%M}"
+	},
+
+	"pulseaudio": {
+		"format": "V: {volume}%"
+	},
+
+	"network": {
+		"format-wifi": "W: {signalStrength}%",
+		"format-disconnected": "W: [-]"
+	},
+
+	"memory": {
+		"format": "M: {}%"
+	},
+
+	"battery": {
+		"format": "B: {capacity}%"
+	},
+
+	"custom/media": {
+		"exec": "playerctl metadata --format '{{cover}}{{artist}} - {{title}}' 2> /dev/null",
+		"interval": 2,
+		"return-type": "text",
+		"on-click": "playerctl play-pause"
+	}
+}

@@ -1,0 +1,9 @@
+[filetype]
+rules = [
+	{ mime = "image/*", fg = "#6ae384" },
+	{ mime = "video/*", fg = "#6ba1c9" },
+	{ mime = "audio/*", fg = "#ff4949" },
+	{ mime = "inode/empty", fg = "white" },
+	{ mime = "text/plain", fg = "gray" },
+	{ url = "*/", fg = "#faa768" }
+]
