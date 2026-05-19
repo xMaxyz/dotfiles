@@ -1,6 +1,42 @@
-yazi.main			#faa768
-hyprland.borders.active		#faa768
-fastfetch.title			#cf6400
-fastfetch.keys			#c78400
-fastfetch.logo			#cf6400
-fastfetch.output		#c4c4c4
+## Color-codes used in the config for quick reference
+
+-----Dunst-----
+
+dunst.urgency_low.background		#2a2a2acc
+dunst.urgency_low.foreground		#cfcfcf
+dunst.urgency_low.frame_color		#666666
+
+dunst.urgency_normal.background 	#1f2b1fcc
+dunst.urgency_normal.foreground		#ffffff
+dunst.urgency_normal.frame_color	#66bb66
+
+dunst.urgency_critical.background	#2b1f1fcc
+dunst.urgency_critical.foreground	#ffffff
+dunst.urgency_critical.frame_color	#cc6666
+
+
+-----Fastfetch-----
+
+fastfetch.title				#cf6400
+fastfetch.keys				#c78400
+fastfetch.logo				#cf6400
+fastfetch.output			#c4c4c4
+
+
+-----Hyprland-----
+
+hyprland.borders.active			#faa768ee, #fdaa6bee
+hyprland.borders.inactive		#595959aa
+
+
+-----Waybar-----
+
+waybar.custom-media.background-color	rgba(20, 20, 20, 0.7)
+waybar.custom-media.color		'white'
+waybar.workspaces.button.active.color	rgba(250, 167, 104, 1)
+waybar.workspaces.button.urgent.bgcolor rgba(255, 80, 80, 0.9)
+
+
+-----Yazi-----
+
+yazi.main				#faa768
