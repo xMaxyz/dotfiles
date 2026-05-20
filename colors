@@ -40,3 +40,8 @@ waybar.workspaces.button.urgent.bgcolor rgba(255, 80, 80, 0.9)
 -----Yazi-----
 
 yazi.main				#faa768
+yazi.mime.image				#6ae384
+yazi.mime.video				#6ba1c9
+yazi.mime.audio				#ff4949
+yazi.mime.text/plain			'white'
+yazi.mime.directory			#faa768
