@@ -27,4 +27,5 @@ typeset -U path PATH
 path=(~/.local/bin $path)
 export PATH
 PROMPT='%F{#faa768}%1~ %#%f '
+RPROMPT=''
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
