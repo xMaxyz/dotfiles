@@ -26,7 +26,7 @@ alias gitlog='git log --oneline'
 typeset -U path PATH
 path=(~/.local/bin $path)
 export PATH
-PROMPT='[%n@%m %1~]%# '
+PROMPT='%F{#faa768}[%n/%1~]%#%f '
 
 eval "$(thefuck --alias)"
 
