@@ -45,3 +45,10 @@ yazi.mime.video				#6ba1c9
 yazi.mime.audio				#ff4949
 yazi.mime.text/plain			'white'
 yazi.mime.directory			#faa768
+
+
+-----Zsh-----
+
+zsh.prompt.%#				#ff803b
+zsh.prompt.%2~				#faa768
+zsh.prompt.>				#cdd6f4
