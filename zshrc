@@ -26,8 +26,5 @@ alias gitlog='git log --oneline'
 typeset -U path PATH
 path=(~/.local/bin $path)
 export PATH
-PROMPT='%F{#faa768}[%n/%1~]%#%f '
-
-eval "$(thefuck --alias)"
-
+PROMPT='%F{#faa768}%1~ %#%f '
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
