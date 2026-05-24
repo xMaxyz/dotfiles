@@ -26,7 +26,7 @@ local fileManager = "kitty -e yazi"
 local menu        = "hyprlauncher"
 local browser     = "firefox"
 local musicPlayer = "tauonmb"
-local taskManager = "kitty -e top"
+local taskManager = "kitty -e btop"
 
 
 -------------------
