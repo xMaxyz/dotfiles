@@ -57,6 +57,7 @@ hl.workspace_rule({
 	on_created_empty = musicPlayer
 })
 
+
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
@@ -372,4 +373,12 @@ hl.window_rule({
 
     move  = "20 monitor_h-120",
     float = true,
+})
+
+hl.window_rule({
+	name = "pavucontrol-opacity",
+	match = {
+		class = "org.pulseaudio.pavucontrol"
+	},
+	opacity = "0.8 override"
 })
