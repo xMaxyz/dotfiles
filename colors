@@ -23,6 +23,11 @@ fastfetch.logo				#cf6400
 fastfetch.output			#c4c4c4
 
 
+-----GTK-Applications-----
+
+org.gnome.desktop.interface.gtk-theme	'Adwaita-dark'
+
+
 -----Hyprland-----
 
 hyprland.borders.active			#faa768ee, #fdaa6bee
