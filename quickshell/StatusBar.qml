@@ -38,9 +38,10 @@ Row {
 
         Text {
             anchors.centerIn: parent
-            font.pointSize: 10.5
+            font.pointSize: 10
+            font.family: "JetBrainsMono Nerd Font"
             color: "#ffffff"
-            text: volumeBox.hasAudio ? "V:  " + volumeBox.volumePercent + "%" : "V: -"
+            text: volumeBox.hasAudio ? "V: " + volumeBox.volumePercent + "%" : "V: -"
         }
     }
 
@@ -65,9 +66,10 @@ Row {
 
         Text {
             anchors.centerIn: parent
-            font.pointSize: 10.5
+            font.pointSize: 10
+            font.family: "JetBrainsMono Nerd Font"
             color: "#ffffff"
-            text: batteryBox.hasBattery ? "B:  " + batteryBox.batteryPercent + "%" : "B:  -"
+            text: batteryBox.hasBattery ? "B: " + batteryBox.batteryPercent + "%" : "B:  -"
         }
     }
 
@@ -109,7 +111,7 @@ Row {
 
                         if (!isNaN(usedMB)) {
                             let usedGB = (usedMB / 1024).toFixed(1);
-                            memoryBox.ramUsage = usedGB + " GiB";
+                            memoryBox.ramUsage = usedGB + "GiB";
                         }
                     }
                 }
@@ -118,9 +120,10 @@ Row {
 
         Text {
             anchors.centerIn: parent
-            font.pointSize: 10.5
+            font.pointSize: 10
+            font.family: "JetBrainsMono Nerd Font"
             color: "#ffffff"
-            text: "M:  " + memoryBox.ramUsage
+            text: "M: " + memoryBox.ramUsage
         }
     }
 
@@ -167,9 +170,10 @@ Row {
         Text {
             id: wifiText
             anchors.centerIn: parent
-            font.pointSize: 10.5
+            font.pointSize: 10
+            font.family: "JetBrainsMono Nerd Font"
             color: "#ffffff"
-            text: "W:  " + wifiBox.wifiName
+            text: "W: " + wifiBox.wifiName
         }
     }
 } 

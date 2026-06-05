@@ -21,11 +21,16 @@ PanelWindow {
         anchors.fill: parent
         color: "#00000000"
 
-        // ===== Workspaces =====
-        WorkspaceBar {
+        // ===== Left Group =====
+        Row {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 10
+            spacing: 10
+
+            WorkspaceBar {}
+            
+            MusicBox {}
         }
 
         // ===== Uhr =====
@@ -41,7 +46,8 @@ PanelWindow {
             Text {
                 id: clockText
                 color: "#ffffff"
-                font.pointSize: 10.5
+                font.pointSize: 10
+                font.family: "JetBrainsMono Nerd Font"
                 anchors.centerIn: parent
                 text: Qt.formatTime(new Date(), "hh:mm")
             }
