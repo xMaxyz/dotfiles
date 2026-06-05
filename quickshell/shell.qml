@@ -15,7 +15,7 @@ PanelWindow {
     implicitHeight: 40
 
     
-    // ===== Hintergrund =====
+    // ===== Background =====
     Rectangle {
         id: statusBar
         anchors.fill: parent
@@ -33,7 +33,7 @@ PanelWindow {
             MusicBox {}
         }
 
-        // ===== Uhr =====
+        // ===== Clock =====
         Rectangle {
             id: centreBox
             anchors.centerIn: parent
@@ -53,7 +53,7 @@ PanelWindow {
             }
         }
 
-        // Uhr-Update-Logik
+        //clock updater
         Timer {
             interval: 1000
             repeat: true
@@ -64,12 +64,17 @@ PanelWindow {
             }
         }
 
-        // ===== Kontrollanzeigen =====
+        // ===== Control Panels =====
         StatusBar {
             id: rightBox
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: 10
         }
+    }
+
+    //music popup
+    MusicPopup {
+        id: musicPopup
     }
 }
