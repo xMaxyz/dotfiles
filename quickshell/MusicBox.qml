@@ -89,6 +89,9 @@ Rectangle {
     Text {
         id: mediaText
         anchors.centerIn: parent
+        width: parent.width - 24
+        elide: Text.ElideRight
+        horizontalAlignment: Text.AlignHCenter
         font.pointSize: 10
         font.family: "JetBrainsMono Nerd Font"
         color: "#ffffff"

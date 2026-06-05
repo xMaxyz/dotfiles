@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell.Hyprland
 
 Rectangle {
-    id: root
+    id: workspacebar
 
     //Variablen
     property int active: Hyprland.focusedWorkspace?.id ?? 1
@@ -11,7 +11,7 @@ Rectangle {
     //Aussehen der Hintergrund-Box
     height: 40
     radius: 10
-    width: rowWorkspaces.width + (root.horizontalPadding * 2)
+    width: rowWorkspaces.width + (workspacebar.horizontalPadding * 2)
     color: "#B3141414"
 
     //Elemente
@@ -31,7 +31,7 @@ Rectangle {
                 visible: modelData.id > 0
                 
                 //Textfarbe nach aktivem Workspace
-                color: modelData.id === root.active
+                color: modelData.id === workspacebar.active
                     ? "#faa768"
                     : "#ffffff"
 
