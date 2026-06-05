@@ -59,25 +59,11 @@ PanelWindow {
         }
 
         // ===== Kontrollanzeigen =====
-        Row {
+        StatusBar {
             id: rightBox
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: 10
-            Rectangle {
-                id: volumeBox
-
-                height: 40
-                width: 160
-                radius: 10
-                color: "#B3141414"
-
-                Text {
-                    anchors.centerIn: parent
-                    color: "#ffffff"
-                    text: "VOL 70%  WIFI OK"
-                }
-            }
         }
     }
 }

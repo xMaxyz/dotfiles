@@ -5,7 +5,7 @@ Rectangle {
     id: root
 
     //Variablen
-    property int active: Hyprland.focusedWorkspace.id
+    property int active: Hyprland.focusedWorkspace?.id ?? 1
     property int horizontalPadding: 24
 
     //Aussehen der Hintergrund-Box
