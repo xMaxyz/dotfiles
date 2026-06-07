@@ -1,0 +1,2 @@
+#!/bin/zsh
+yt-dlp -t mp3 --audio-quality 0 -P ~/Downloads "https://www.youtube.com/watch?v=$(echo $(sqlite3 ~/.config/rs-pug/pug.db "SELECT song_id FROM recently_played ORDER BY played_at ASC LIMIT 1;"))"
