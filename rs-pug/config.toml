@@ -3,7 +3,7 @@ mpris_enabled = true
 theme = "dark"
 plugins_enabled = true
 plugins_dir = "/home/max/.config/rs-pug/plugins"
-music_directories = ["~/Musik/MUSIK"]
+music_directories = ["~/Music/"]
 
 [search]
 limit = 20
