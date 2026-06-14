@@ -8,11 +8,11 @@ Rectangle {
 
     property string currentTrack: "-"
 
-    width: Math.max(Theme.boxWidth, mediaText.implicitWidth + 20)
-    height: Theme.boxHeight
+    width: Math.max(Theme.menubarBoxWidth, mediaText.implicitWidth + 20)
+    height: Theme.menubarBoxHeight
     radius: Theme.borderRadius
     clip: true
-    color: Theme.background
+    color: Theme.menubarBackground
 
     //Timer for bridge between MusicBox and popup
     Timer {

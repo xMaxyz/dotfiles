@@ -10,10 +10,10 @@ Rectangle {
     property int horizontalPadding: 24
 
     //Aussehen der Hintergrund-Box
-    height: Theme.boxHeight
+    height: Theme.menubarBoxHeight
     radius: Theme.borderRadius
     width: rowWorkspaces.width + (workspacebar.horizontalPadding * 2)
-    color: Theme.background
+    color: Theme.menubarBackground
 
     //Elemente
     Row {

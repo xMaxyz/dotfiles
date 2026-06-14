@@ -32,10 +32,10 @@ Row {
         }
 
 
-        width: Theme.boxWidth
-        height: Theme.boxHeight
+        width: Theme.menubarBoxWidth
+        height: Theme.menubarBoxHeight
         radius: Theme.borderRadius
-        color: Theme.background
+        color: Theme.menubarBackground
 
         Text {
             anchors.centerIn: parent
@@ -60,10 +60,10 @@ Row {
         //calculate percentage
         readonly property int batteryPercent: hasBattery ? Math.round(UPower.displayDevice.percentage * 100) : 0
 
-        width: Theme.boxWidth
-        height: Theme.boxHeight
+        width: Theme.menubarBoxWidth
+        height: Theme.menubarBoxHeight
         radius: Theme.borderRadius
-        color: Theme.background
+        color: Theme.menubarBackground
 
         Text {
             anchors.centerIn: parent
@@ -80,10 +80,10 @@ Row {
 
         property string ramUsage: "0.0 GB"
 
-        width: Math.max(Theme.boxWidth, memoryText.implicitWidth + 20)
-        height: Theme.boxHeight
+        width: Math.max(Theme.menubarBoxWidth, memoryText.implicitWidth + 20)
+        height: Theme.menubarBoxHeight
         radius: Theme.borderRadius
-        color: Theme.background
+        color: Theme.menubarBackground
 
         //Timer for triggering command
         Timer {
@@ -135,10 +135,10 @@ Row {
 
         property string wifiName: "-"
 
-        width: Math.max(Theme.boxWidth, wifiText.implicitWidth + 20)
-        height: Theme.boxHeight
+        width: Math.max(Theme.menubarBoxWidth, wifiText.implicitWidth + 20)
+        height: Theme.menubarBoxHeight
         radius: Theme.borderRadius
-        color: Theme.background
+        color: Theme.menubarBackground
         Behavior on width {
             NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
         }

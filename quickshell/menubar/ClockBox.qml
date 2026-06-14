@@ -9,10 +9,10 @@ Item {
     Rectangle {
         anchors.centerIn: parent
 
-        height: Theme.boxHeight
-        width: Theme.boxWidth
+        height: Theme.menubarBoxHeight
+        width: Theme.menubarBoxWidth
         radius: Theme.borderRadius
-        color: Theme.background
+        color: Theme.menubarBackground
 
         Text {
             id: clockText

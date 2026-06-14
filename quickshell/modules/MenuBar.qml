@@ -11,7 +11,7 @@ PanelWindow {
     }
 
     color: "transparent"
-    implicitHeight: Theme.boxHeight
+    implicitHeight: Theme.menubarBoxHeight
 
     
     // ===== Background =====
