@@ -1,10 +1,9 @@
 import QtQuick
 import Quickshell
 import "../menubar" as MenuBar
+import "../common"
 
 PanelWindow {
-    id: statusbarRoot
-
     anchors {
         top: true
         left: true
@@ -12,12 +11,11 @@ PanelWindow {
     }
 
     color: "transparent"
-    implicitHeight: 40
+    implicitHeight: Theme.boxHeight
 
     
     // ===== Background =====
     Rectangle {
-        id: statusBar
         anchors.fill: parent
         color: "#00000000"
 
@@ -36,9 +34,8 @@ PanelWindow {
         // ===== Clock =====
         MenuBar.ClockBox {}
 
-        // ===== Control Panels =====
+        // ===== Right Group =====
         MenuBar.StatusBar {
-            id: rightBox
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: 10

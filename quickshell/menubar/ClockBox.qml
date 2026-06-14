@@ -1,24 +1,24 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import "../common"
 
 Item {
     anchors.centerIn: parent
 
     Rectangle {
-        id: centreBox
         anchors.centerIn: parent
 
-        height: 40
-        width: 60
-        radius: 10
-        color: "#B3141414"
+        height: Theme.boxHeight
+        width: Theme.boxWidth
+        radius: Theme.borderRadius
+        color: Theme.background
 
         Text {
             id: clockText
-            color: "#ffffff"
-            font.pointSize: 10
-            font.family: "JetBrainsMono Nerd Font"
+            color: Theme.foreground
+            font.pointSize: Theme.normalFontSize
+            font.family: Theme.fontFamily
             anchors.centerIn: parent
             text: Qt.formatTime(new Date(), "hh:mm")
         }

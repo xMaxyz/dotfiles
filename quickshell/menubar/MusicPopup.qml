@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "../common"
 
 PopupWindow {
     id: popupWindow
@@ -20,7 +21,7 @@ PopupWindow {
     //main background
     Rectangle {
         anchors.fill: parent
-        radius: 12
+        radius: Theme.borderRadius
         color: "#F2141414"
         border.color: "#33ffffff"
         border.width: 1
@@ -65,15 +66,15 @@ PopupWindow {
             Column {
                 width: parent.width - 108; height: parent.height; spacing: 8
 
-                Text { text: "Musik-Steuerung"; color: "#ffffff"; font.bold: true; font.pointSize: 10 }
+                Text { text: "Musik-Steuerung"; color: Theme.foreground; font.bold: true; font.pointSize: 10 }
 
                 Row {
                     spacing: 16
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    Text { text: "⏮"; color: "#ffffff"; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: prevProcess.running = true } }
-                    Text { text: "⏯"; color: "#ffffff"; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: toggleProcess.running = true } }
-                    Text { text: "⏭"; color: "#ffffff"; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: nextProcess.running = true } }
+                    Text { text: "⏮"; color: Theme.foreground; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: prevProcess.running = true } }
+                    Text { text: "⏯"; color: Theme.foreground; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: toggleProcess.running = true } }
+                    Text { text: "⏭"; color: Theme.foreground; font.pointSize: 14; MouseArea { anchors.fill: parent; onClicked: nextProcess.running = true } }
                 }
             }
         }

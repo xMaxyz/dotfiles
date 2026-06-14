@@ -1,0 +1,7 @@
+My quickshell setup in development. 
+
+===== Folder structure =====
+Source file is shell.qml where all wanted modules are enabled.
+./modules/ holds all top-level modules like the menu bar.
+./common/ holds global variables and components used several times, especially colors
+All components of top-level modules are in their own directory in the project's root directory, e.g. ./modules/MenuBar.qml imports everything unique from ./menubar/

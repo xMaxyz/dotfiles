@@ -1,17 +1,18 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "../common"
 
 Rectangle {
     id: mediaBox
 
     property string currentTrack: "-"
 
-    width: Math.max(70, mediaText.implicitWidth + 24)
-    height: 40
-    radius: 10
+    width: Math.max(Theme.boxWidth, mediaText.implicitWidth + 20)
+    height: Theme.boxHeight
+    radius: Theme.borderRadius
     clip: true
-    color: "#B3141414"
+    color: Theme.background
 
     //Timer for bridge between MusicBox and popup
     Timer {
@@ -92,9 +93,9 @@ Rectangle {
         width: parent.width - 24
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 10
-        font.family: "JetBrainsMono Nerd Font"
-        color: "#ffffff"
+        font.pointSize: Theme.normalFontSize
+        font.family: Theme.fontFamily
+        color: Theme.foreground
         text: mediaBox.currentTrack
     }
 }

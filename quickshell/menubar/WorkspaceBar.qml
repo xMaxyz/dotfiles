@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Hyprland
+import "../common"
 
 Rectangle {
     id: workspacebar
@@ -9,10 +10,10 @@ Rectangle {
     property int horizontalPadding: 24
 
     //Aussehen der Hintergrund-Box
-    height: 40
-    radius: 10
+    height: Theme.boxHeight
+    radius: Theme.borderRadius
     width: rowWorkspaces.width + (workspacebar.horizontalPadding * 2)
-    color: "#B3141414"
+    color: Theme.background
 
     //Elemente
     Row {
@@ -26,14 +27,14 @@ Rectangle {
             delegate: Text {
                 //allg. Aussehen
                 text: modelData.id
-                font.pointSize: 10.5
+                font.pointSize: Theme.normalFontSize
                 opacity: 1.0
                 visible: modelData.id > 0
                 
                 //Textfarbe nach aktivem Workspace
                 color: modelData.id === workspacebar.active
-                    ? "#faa768"
-                    : "#ffffff"
+                    ? Theme.accent
+                    : Theme.foreground
 
                 //Animation
                 Behavior on color {

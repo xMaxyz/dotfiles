@@ -4,6 +4,7 @@ import Quickshell.Services.Pipewire
 import Quickshell.Services.UPower
 import Quickshell.Io
 import Quickshell.Networking
+import "../common"
 
 Row {
     id: root
@@ -31,16 +32,16 @@ Row {
         }
 
 
-        width: 70
-        height: 40
-        radius: 10
-        color: "#B3141414"
+        width: Theme.boxWidth
+        height: Theme.boxHeight
+        radius: Theme.borderRadius
+        color: Theme.background
 
         Text {
             anchors.centerIn: parent
-            font.pointSize: 10
-            font.family: "JetBrainsMono Nerd Font"
-            color: "#ffffff"
+            font.pointSize: Theme.normalFontSize
+            font.family: Theme.fontFamily
+            color: Theme.foreground
             text: volumeBox.hasAudio ? "V: " + volumeBox.volumePercent + "%" : "V: -"
         }
     }
@@ -59,16 +60,16 @@ Row {
         //calculate percentage
         readonly property int batteryPercent: hasBattery ? Math.round(UPower.displayDevice.percentage * 100) : 0
 
-        width: 70
-        height: 40
-        radius: 10
-        color: "#B3141414"
+        width: Theme.boxWidth
+        height: Theme.boxHeight
+        radius: Theme.borderRadius
+        color: Theme.background
 
         Text {
             anchors.centerIn: parent
-            font.pointSize: 10
-            font.family: "JetBrainsMono Nerd Font"
-            color: "#ffffff"
+            font.pointSize: Theme.normalFontSize
+            font.family: Theme.fontFamily
+            color: Theme.foreground
             text: batteryBox.hasBattery ? "B: " + batteryBox.batteryPercent + "%" : "B:  -"
         }
     }
@@ -79,10 +80,10 @@ Row {
 
         property string ramUsage: "0.0 GB"
 
-        width: 90
-        height: 40
-        radius: 10
-        color: '#b3141414'
+        width: Math.max(Theme.boxWidth, memoryText.implicitWidth + 20)
+        height: Theme.boxHeight
+        radius: Theme.borderRadius
+        color: Theme.background
 
         //Timer for triggering command
         Timer {
@@ -119,10 +120,11 @@ Row {
         }
 
         Text {
+            id: memoryText
             anchors.centerIn: parent
-            font.pointSize: 10
-            font.family: "JetBrainsMono Nerd Font"
-            color: "#ffffff"
+            font.pointSize: Theme.normalFontSize
+            font.family: Theme.fontFamily
+            color: Theme.foreground
             text: "M: " + memoryBox.ramUsage
         }
     }
@@ -133,10 +135,10 @@ Row {
 
         property string wifiName: "-"
 
-        width: Math.max(70, wifiText.implicitWidth + 20)
-        height: 40
-        radius: 10
-        color: "#B3141414"
+        width: Math.max(Theme.boxWidth, wifiText.implicitWidth + 20)
+        height: Theme.boxHeight
+        radius: Theme.borderRadius
+        color: Theme.background
         Behavior on width {
             NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
         }
@@ -170,9 +172,9 @@ Row {
         Text {
             id: wifiText
             anchors.centerIn: parent
-            font.pointSize: 10
-            font.family: "JetBrainsMono Nerd Font"
-            color: "#ffffff"
+            font.pointSize: Theme.normalFontSize
+            font.family: Theme.fontFamily
+            color: Theme.foreground
             text: "W: " + wifiBox.wifiName
         }
     }
