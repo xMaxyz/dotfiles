@@ -26,6 +26,7 @@ local fileManager = "kitty -e yazi"
 local menu        = "hyprlauncher"
 local browser     = "firefox"
 local musicPlayer = "tauonmb"
+local musicStreamer = "kitty -e rs-pug"
 local taskManager = "kitty -e btop"
 
 
@@ -53,8 +54,12 @@ hl.workspace_rule({
 	on_created_empty = taskManager
 })
 hl.workspace_rule({
-	workspace = "special:music",
+	workspace = "special:musicplayer",
 	on_created_empty = musicPlayer
+})
+hl.workspace_rule({
+	workspace = "special:musicstreamer",
+	on_created_empty = musicStreamer
 })
 
 
@@ -300,8 +305,8 @@ hl.bind(mainMod .. " + SHIFT + code:49", hl.dsp.window.move({ workspace = "speci
 hl.bind(mainMod .. " + T",	hl.dsp.workspace.toggle_special("taskmanager"))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.window.move({ workspace = "special:taskmanager" }))
 
-hl.bind(mainMod .. " + M",	hl.dsp.workspace.toggle_special("music"))
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special:music" }))
+hl.bind(mainMod .. " + M",	hl.dsp.workspace.toggle_special("musicplayer"))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.workspace.toggle_special("musicstreamer"))
 
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
