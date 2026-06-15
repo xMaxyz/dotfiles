@@ -5,17 +5,16 @@ import "../../common"
 Rectangle {
     id: clockWidget
     
-    // Passt sich automatisch der Breite der Widget-Zone an
+    //width equals assigned widget zone width
     Layout.fillWidth: true
     Layout.preferredHeight: 140
     
-    // Moderner, semitransparenter Hintergrund (Glaseffekt)
-    color: Theme.widgetBackground // Sehr dunkles, 15% transparentes Schwarz
+    color: Theme.widgetBackground
     radius: Theme.borderRadius
-    border.color: Theme.widgetBorderColor // Subtiler, helltransparenten Rand
+    border.color: Theme.widgetBorderColor
     border.width: 1
 
-    // Interner Timer, der jede Sekunde die Zeit aktualisiert
+    //Timer to update time every second
     Timer {
         id: clockTimer
         interval: 1000
@@ -29,13 +28,13 @@ Rectangle {
         }
     }
 
-    // Anordnung von Uhrzeit und Datum übereinander
+    //arrange time and date on top of each other
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 15
         spacing: 5
 
-        // Große Uhrzeit
+        //time
         Text {
             id: timeText
             Layout.alignment: Qt.AlignHCenter
@@ -46,11 +45,11 @@ Rectangle {
             renderType: Text.NativeRendering
         }
 
-        // Ausgeschriebenes Datum darunter
+        //date
         Text {
             id: dateText
             Layout.alignment: Qt.AlignHCenter
-            color: Theme.widgetSubtext // Leicht transparentes Weiß für bessere Hierarchie
+            color: Theme.widgetSubtext //slightly darker than normal text
             font.pointSize: 13
             font.weight: Font.Normal
             font.family: Theme.fontFamily
