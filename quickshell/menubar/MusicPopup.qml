@@ -9,7 +9,6 @@ PopupWindow {
     property bool mouseInPopup: false
 
     anchor {
-        window: root
         edges: Edges.Bottom | Edges.Left
     }
 
@@ -57,7 +56,6 @@ PopupWindow {
                     anchors.centerIn: parent
                     text: "🎵"
                     font.pointSize: 24
-                    visible: activeMusicBox.coverUrl.length === 0
                 }
             }
 
