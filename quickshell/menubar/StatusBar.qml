@@ -19,7 +19,7 @@ Row {
         }
 
         //check if there's a sink
-        property bool hasAudio: Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio
+        property bool hasAudio: Pipewire.defaultAudioSink?.audio ?? false
         //get raw volume
         property real volumeRaw: hasAudio ? Pipewire.defaultAudioSink.audio.volume : 0.0
         //calculate real volume
@@ -54,7 +54,7 @@ Row {
         readonly property bool hasBattery: UPower.displayDevice !== null
         //calculate percentage
         readonly property int batteryPercent: hasBattery ? Math.round(UPower.displayDevice.percentage * 100) : 0
-
+        
         width: Theme.menubarBoxWidth
         height: Theme.menubarBoxHeight
         radius: Theme.borderRadius
@@ -64,7 +64,7 @@ Row {
             anchors.centerIn: parent
             font.pointSize: Theme.normalFontSize
             font.family: Theme.fontFamily
-            color: Theme.foreground
+            color: (batteryBox.batteryPercent < 50) ? Theme.accent : Theme.foreground
             text: batteryBox.hasBattery ? "B: " + batteryBox.batteryPercent + "%" : "B:  -"
         }
     }
