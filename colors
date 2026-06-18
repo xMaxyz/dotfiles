@@ -34,6 +34,23 @@ hyprland.borders.active			#faa768ee, #fdaa6bee
 hyprland.borders.inactive		#595959aa
 
 
+-----Quickshell-----
+Here the form #RRGGBBAA is used, but be aware that QML uses #AARRGGBB
+
+menubar.background              	#b3141414
+  
+widget.background               	#00000025 
+widget.borders                  	#ffffff15
+widget.subtext                  	#ffffffd0
+
+textcolor                       	#ffffff
+accent                          	#faa768
+
+menubar.musicpopup.background   	#141414f2
+menubar.musicpopup.borders      	#ffffff33
+menubar.musicpopup.cover.placeholder 	#ffffff33
+
+
 -----Waybar-----
 
 waybar.custom-media.background-color	rgba(20, 20, 20, 0.7)
