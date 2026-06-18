@@ -24,13 +24,8 @@ Row {
         property real volumeRaw: hasAudio ? Pipewire.defaultAudioSink.audio.volume : 0.0
         //calculate real volume
         property int volumePercent: Math.round(volumeRaw * 100)
-
-        Component.onCompleted: { //Debug
-        console.log("=== VolumeBox Geladen ===")
-        console.log("Pipewire Objekt vorhanden:", Pipewire ? "Ja" : "Nein")
-        console.log("Audio Sink vorhanden:", Pipewire.defaultAudioSink ? "Ja" : "Nein")
-        }
-
+        //check whether default sink is muted
+        property bool isMuted: Pipewire.defaultAudioSink?.audio?.muted ?? false
 
         width: Theme.menubarBoxWidth
         height: Theme.menubarBoxHeight
@@ -41,7 +36,7 @@ Row {
             anchors.centerIn: parent
             font.pointSize: Theme.normalFontSize
             font.family: Theme.fontFamily
-            color: Theme.foreground
+            color: volumeBox.isMuted ? Theme.accent : Theme.foreground
             text: volumeBox.hasAudio ? "V: " + volumeBox.volumePercent + "%" : "V: -"
         }
     }
