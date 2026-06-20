@@ -32,12 +32,7 @@ PanelWindow {
                 width: workspacebarLoader.width
 
                 property bool isHyprland: Quickshell.env("XDG_CURRENT_DESKTOP") === "Hyprland"
-                Component.onCompleted: {
-                    console.log("=== QUICKSHELL DEBUG ===")
-                    console.log("XDG_CURRENT_DESKTOP:", Quickshell.env("XDG_CURRENT_DESKTOP"))
-                    console.log("Shell Root Pfad:", Quickshell.shellDir)
-                    console.log("Ziel-Pfad existiert?", Quickshell.shellDir + "/menubar/WorkspaceBar.qml")
-                }  
+                
                 Loader {
                     id: workspacebarLoader
                     active: checkForHyprland.isHyprland
@@ -45,16 +40,6 @@ PanelWindow {
                     width: item ? item.implicitWidth : 0
                     height: item ? item.height : 0
 
-                    onStatusChanged: {
-        if (status === Loader.Error) {
-            console.log("=== LOADER FEHLER ===");
-            console.log("Grund:", progress, errorString());
-        } else if (status === Loader.Ready) {
-            console.log("=== LOADER ERFOLG ===");
-            console.log("Geladenes Item:", item);
-            console.log("Größe der Bar:", item.width, "x", item.height);
-        }
-    }
                 }
             }          
             MenuBar.MusicBox {}
