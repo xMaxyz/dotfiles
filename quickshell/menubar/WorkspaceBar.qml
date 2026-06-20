@@ -12,7 +12,7 @@ Rectangle {
     //Aussehen der Hintergrund-Box
     height: Theme.menubarBoxHeight
     radius: Theme.borderRadius
-    width: rowWorkspaces.width + (workspacebar.horizontalPadding * 2)
+    implicitWidth: rowWorkspaces.width + (workspacebar.horizontalPadding * 2)
     color: Theme.menubarBackground
 
     //Elemente

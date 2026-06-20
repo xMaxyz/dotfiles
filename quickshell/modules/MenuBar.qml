@@ -26,8 +26,22 @@ PanelWindow {
             anchors.leftMargin: 10
             spacing: 10
 
-            MenuBar.WorkspaceBar {}
-            
+            Item {
+                id: checkForHyprland
+                height: workspacebarLoader.height
+                width: workspacebarLoader.width
+
+                property bool isHyprland: Quickshell.env("XDG_CURRENT_DESKTOP") === "Hyprland"
+                
+                Loader {
+                    id: workspacebarLoader
+                    active: checkForHyprland.isHyprland
+                    source: Qt.resolvedUrl(Quickshell.shellDir + "/menubar/WorkspaceBar.qml")
+                    width: item ? item.implicitWidth : 0
+                    height: item ? item.height : 0
+
+                }
+            }          
             MenuBar.MusicBox {}
         }
 
