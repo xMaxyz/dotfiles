@@ -12,19 +12,11 @@ environment {
     NIRI_USER_TERMINAL "kitty"
     NIRI_USER_TASKMANAGER "kitty -e btop"
     NIRI_USER_FILEMANAGER "kitty -e yazi"
-    NIRI_USER_MENU "qs -c noctalia-shell ipc call launcher toggle"
+    NIRI_USER_MENU "hyprlauncher"
     NIRI_USER_BROWSER "firefox"
     NIRI_USER_MUSICPLAYER "tauonmb"
     NIRI_USER_MUSICSTREAMER "kitty -e rs-pug"
 }
-
-
-
-
-
-
-
-
 
 
 //====================
@@ -43,7 +35,8 @@ environment {
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
 spawn-at-startup "dunst"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "quickshell"
+spawn-at-startup "swaybg" "-i" "/home/max/Pictures/.wallpaper/wallpaper" "-m" "fill"
 
 
 
@@ -484,9 +477,8 @@ binds {
     Mod+T hotkey-overlay-title="Run Task Manager" { spawn-sh "$NIRI_USER_TASKMANAGER"; }
     Mod+M hotkey-overlay-title="Run Music Player" { spawn-sh "$NIRI_USER_MUSICPLAYER"; }
     Mod+Shift+M hotkey-overlay-title="Run Music Streamer" { spawn-sh "$NIRI_USER_MUSICSTREAMER"; }
+    Mod+A { spawn "nwg-drawer"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Mod+C { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
-    Mod+Shift+C { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
 
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
