@@ -12,7 +12,7 @@ environment {
     NIRI_USER_TERMINAL "kitty"
     NIRI_USER_TASKMANAGER "kitty -e btop"
     NIRI_USER_FILEMANAGER "kitty -e yazi"
-    NIRI_USER_MENU "hyprlauncher"
+    NIRI_USER_MENU "qs -c noctalia-shell ipc call launcher toggle"
     NIRI_USER_BROWSER "firefox"
     NIRI_USER_MUSICPLAYER "tauonmb"
     NIRI_USER_MUSICSTREAMER "kitty -e rs-pug"
@@ -41,6 +41,9 @@ environment {
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+
+spawn-at-startup "dunst"
+spawn-at-startup "qs" "-c" "noctalia-shell"
 
 
 
@@ -207,7 +210,6 @@ layout {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
-        proportion 1.0
 
         // Fixed sets the width in logical pixels exactly.
         // fixed 1920
@@ -385,7 +387,7 @@ window-rule {
 
 //put wallpaper in background
 layer-rule {
-    match namespace="^wallpaper$"
+    match namespace="^noctalia-wallpaper*"
     place-within-backdrop true
 }
 
@@ -477,13 +479,14 @@ binds {
     //Keybinds to start programs
     Mod+X hotkey-overlay-title="Open a Terminal" { spawn-sh "$NIRI_USER_TERMINAL"; }
     Mod+Space hotkey-overlay-title="Run an Application" { spawn-sh "$NIRI_USER_MENU"; }
-    Mod+A hotkey-overlay-title="Show App Overview" { spawn "nwg-drawer"; }
     Mod+E hotkey-overlay-title="Run file manager" { spawn-sh "$NIRI_USER_FILEMANAGER"; }
     Mod+B hotkey-overlay-title="Run Browser" { spawn-sh "$NIRI_USER_BROWSER"; }
     Mod+T hotkey-overlay-title="Run Task Manager" { spawn-sh "$NIRI_USER_TASKMANAGER"; }
     Mod+M hotkey-overlay-title="Run Music Player" { spawn-sh "$NIRI_USER_MUSICPLAYER"; }
     Mod+Shift+M hotkey-overlay-title="Run Music Streamer" { spawn-sh "$NIRI_USER_MUSICSTREAMER"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+C { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
+    Mod+Shift+C { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
 
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -639,21 +642,20 @@ binds {
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
     // If the window is already in a column, they will expel it out.
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
-
+    Mod+Comma  { consume-or-expel-window-left; }
+    Mod+Period { consume-or-expel-window-right; }
     // Consume one window from the right to the bottom of the focused column.
-    Mod+Comma  { consume-window-into-column; }
+    Mod+Shift+Comma  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
-    Mod+Period { expel-window-from-column; }
+    Mod+Shift+Period { expel-window-from-column; }
 
-    // Cycle through widths set in preset-column-widths.
+    // Cycle through widths and heights set in preset-column-widths and preset-window-heights.
     Mod+R { switch-preset-column-width; }
-    // Cycling through the presets in reverse order is also possible.
     Mod+Shift+R { switch-preset-column-width-back; }
-
-    Mod+Ctrl+Shift+R { switch-preset-window-height; }
-    Mod+Ctrl+R { reset-window-height; }
+    //Mod+Minus { switch-preset-window-height; }
+    //Mod+Shift+Minus { reset-window-height; }
+    Mod+Minus { set-window-height "+5%"; }
+    Mod+Shift+Minus { set-window-height "-5%"; }
 
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
@@ -666,12 +668,12 @@ binds {
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
-    Mod+Ctrl+F { expand-column-to-available-width; }
+    // Mod+Ctrl+F { expand-column-to-available-width; }
 
-    Mod+C { center-column; }
+    // Mod+C { center-column; }
 
     // Center all fully visible columns on screen.
-    Mod+Ctrl+C { center-visible-columns; }
+    // Mod+Shift+C { center-visible-columns; }
 
     // Finer width adjustments.
     // This command can also:
@@ -681,12 +683,13 @@ binds {
     // * adjust width as a percentage of screen width: "-10%" or "+10%"
     // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
     // set-column-width "100" will make the column occupy 200 physical screen pixels.
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
+    // Mod+Minus { set-column-width "-10%"; }
+    // Mod+Equal { set-column-width "+10%"; }
 
     // Finer height adjustments when in column with other windows.
-    Mod+Shift+Minus { set-window-height "-10%"; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
+    // used further above
+    // Mod+Shift+Minus { set-window-height "-10%"; }
+    // Mod+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
     Mod+V       { toggle-window-floating; }
@@ -705,9 +708,9 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    Mod+S { screenshot; }
+    Mod+Shift+S { screenshot-screen; }
+    Mod+Alt+S { screenshot-window; }
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here

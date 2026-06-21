@@ -1,4 +1,5 @@
-My quickshell setup in development. 
+My quickshell setup in development.
+It has been replaced by Noctalia in my daily setup, but will still be developed.  
 
 ===== Folder structure =====
 Source file is shell.qml where all wanted modules are enabled.
