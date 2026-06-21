@@ -12,7 +12,7 @@ environment {
     NIRI_USER_TERMINAL "kitty"
     NIRI_USER_TASKMANAGER "kitty -e btop"
     NIRI_USER_FILEMANAGER "kitty -e yazi"
-    NIRI_USER_MENU "hyprlauncher"
+    NIRI_USER_MENU "fuzzel"
     NIRI_USER_BROWSER "firefox"
     NIRI_USER_MUSICPLAYER "tauonmb"
     NIRI_USER_MUSICSTREAMER "kitty -e rs-pug"
@@ -377,6 +377,7 @@ window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     open-floating true
 }
+
 
 //put wallpaper in background
 layer-rule {
