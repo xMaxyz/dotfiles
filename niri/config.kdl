@@ -381,7 +381,7 @@ window-rule {
 
 //put wallpaper in background
 layer-rule {
-    match namespace="^noctalia-wallpaper*"
+    match namespace="^wallpaper*"
     place-within-backdrop true
 }
 
