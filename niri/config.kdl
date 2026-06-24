@@ -38,7 +38,7 @@ spawn-at-startup "dunst"
 spawn-at-startup "quickshell"
 spawn-at-startup "swaybg" "-i" "/home/max/Pictures/.wallpaper/wallpaper" "-m" "fill"
 spawn-at-startup "xwayland-satellite"
-
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 
 
 
