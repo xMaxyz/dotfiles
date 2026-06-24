@@ -8,6 +8,7 @@ import "../desktop/widgets" as Widget
 PanelWindow {
     aboveWindows: false //prevents desktop to lay above windows
     WlrLayershell.layer: WlrLayer.Background //puts desktop in background
+    WlrLayershell.namespace: "desktop_widgets" //namespace for layering
     color: "transparent"
 
     //fills entire screen

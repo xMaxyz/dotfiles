@@ -1,14 +1,21 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 import "../menubar" as MenuBar
 import "../common"
 
+ShellRoot {
 PanelWindow {
     anchors {
         top: true
         left: true
         right: true
     }
+    
+    //puts menubar in Wayland layer "top"
+    WlrLayershell.layer: WlrLayer.Top
+    WlrLayershell.namespace: "menubar"
+
 
     color: "transparent"
     implicitHeight: Theme.menubarBoxHeight
@@ -60,4 +67,5 @@ PanelWindow {
     MenuBar.MusicPopup {
         id: musicPopup
     }
+}
 }
