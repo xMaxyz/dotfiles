@@ -1,0 +1,37 @@
+#!/bin/zsh
+
+THEME=$1
+
+if [ -z "$THEME" ]; then
+	echo "Bitte ein Theme angeben!";
+	exit 1;
+fi
+
+THEME_DIR="$HOME/.dotfiles/themes/$THEME"
+
+if [ ! -d "$THEME_DIR" ]; then
+	echo "Theme $THEME existiert nicht!";
+	exit 1;
+fi
+
+
+rm $HOME/.zshrc
+rm $XDG_CONFIG_HOME/dunst
+rm $XDG_CONFIG_HOME/fastfetch
+rm $XDG_CONFIG_HOME/fuzzel
+rm $XDG_CONFIG_HOME/kitty
+rm $XDG_CONFIG_HOME/niri
+rm $XDG_CONFIG_HOME/yazi
+
+ln -s $THEME_DIR/zshrc $HOME/.zshrc
+ln -s $THEME_DIR/dunst/ $XDG_CONFIG_HOME/
+ln -s $THEME_DIR/fastfetch/ $XDG_CONFIG_HOME/
+ln -s $THEME_DIR/fuzzel/ $XDG_CONFIG_HOME/
+ln -s $THEME_DIR/kitty/ $XDG_CONFIG_HOME/
+ln -s $THEME_DIR/niri/ $XDG_CONFIG_HOME/
+ln -s $THEME_DIR/yazi/ $XDG_CONFIG_HOME/
+
+
+
+rm $HOME/.local/bin/theme
+ln -s $HOME/.dotfiles/theme $HOME/.local/bin
