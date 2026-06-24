@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
+import "../common"
 
 ShellRoot {
     PanelWindow {
@@ -22,7 +23,7 @@ ShellRoot {
 
         Image {
             id: backgroundImage
-            source: "file://" + Quickshell.env("HOME") + "/Pictures/.wallpaper/wallpaper"
+            source: "file://" + Quickshell.env("HOME") + "/Pictures/.wallpaper/" + Theme.wallpaperName
             anchors.fill: parent
             
             // Verhindert Verzerrungen und füllt den Bildschirm sauber aus

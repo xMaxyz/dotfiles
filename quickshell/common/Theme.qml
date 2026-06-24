@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+readonly property string wallpaperName: "red-dust"
 
     //colors
     readonly property color menubarBackground: "#B3141414" //background for components of menubar
