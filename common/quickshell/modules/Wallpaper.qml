@@ -23,7 +23,7 @@ ShellRoot {
 
         Image {
             id: backgroundImage
-            source: "file://" + Quickshell.env("HOME") + "/Pictures/.wallpaper/" + Theme.wallpaperName
+            source: "file://" + Quickshell.env("HOME") + "/Pictures/.wallpaper/wallpaper"
             anchors.fill: parent
             
             // Verhindert Verzerrungen und füllt den Bildschirm sauber aus
