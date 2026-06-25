@@ -1,37 +1,83 @@
 #!/bin/zsh
 
-THEME=$1
+#====================
+#=====VARIABLES======
+#====================
+THEME=""
+WORKING_DIR=$HOME/.dotfiles/working/
 
+#get parameters
+while getopts "lt:w:" opt; do
+	case "$opt" in
+		l) 
+			ls -1 $HOME/.dotfiles/themes/
+			exit 0
+			;;
+
+		t) THEME="$OPTARG" ;;
+		w) WALLPAPER="$OPTARG" ;;
+		\?)
+			echo "Nutzung: $0 [-t theme_name] [-w wallpaper_name] [-l]"
+			exit 1
+			;;
+	esac
+done
+
+THEME_DIR=$HOME/.dotfiles/themes/$THEME
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+
+
+#====================
+#=====DEP CHECK======
+#====================
+
+#check if theme is specified
 if [ -z "$THEME" ]; then
 	echo "Bitte ein Theme angeben!";
 	exit 1;
 fi
 
-THEME_DIR="$HOME/.dotfiles/themes/$THEME"
-
+#check if theme exists
 if [ ! -d "$THEME_DIR" ]; then
 	echo "Theme $THEME existiert nicht!";
 	exit 1;
 fi
 
+#check if wallpaper was set and is accepted
+if [ -z "$WALLPAPER" ]; then
+	WALLPAPER="$THEME"
+elif [ ! -f "$HOME/Pictures/.wallpaper/$WALLPAPER" ]; then
+	echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zum Theme-Standard: $THEME"
+	WALLPAPER="$THEME"
+fi
 
-rm $HOME/.zshrc
-rm $XDG_CONFIG_HOME/dunst
-rm $XDG_CONFIG_HOME/fastfetch
-rm $XDG_CONFIG_HOME/fuzzel
-rm $XDG_CONFIG_HOME/kitty
-rm $XDG_CONFIG_HOME/niri
-rm $XDG_CONFIG_HOME/yazi
+#check if working dir exists
+if [ ! -d "$WORKING_DIR" ]; then
+	mkdir -p $HOME/.dotfiles/working/
+fi
 
-ln -s $THEME_DIR/zshrc $HOME/.zshrc
-ln -s $THEME_DIR/dunst/ $XDG_CONFIG_HOME/
-ln -s $THEME_DIR/fastfetch/ $XDG_CONFIG_HOME/
-ln -s $THEME_DIR/fuzzel/ $XDG_CONFIG_HOME/
-ln -s $THEME_DIR/kitty/ $XDG_CONFIG_HOME/
-ln -s $THEME_DIR/niri/ $XDG_CONFIG_HOME/
-ln -s $THEME_DIR/yazi/ $XDG_CONFIG_HOME/
+#check if config dir exists
+if [ ! -d "$CONFIG_DIR" ]; then
+	mkdir -p $CONFIG_DIR
+fi
 
 
 
-rm $HOME/.local/bin/theme
-ln -s $HOME/.dotfiles/theme $HOME/.local/bin
+
+
+
+
+#wallpaper
+ln -sfn $HOME/Pictures/.wallpaper/$WALLPAPER $HOME/Pictures/.wallpaper/wallpaper
+
+#zsh
+ln -sfn $THEME_DIR/zshrc $HOME/.zshrc
+
+#normal programs
+ln -sfn $THEME_DIR/dunst/ $XDG_CONFIG_HOME/
+ln -sfn $THEME_DIR/fastfetch/ $XDG_CONFIG_HOME/
+ln -sfn $THEME_DIR/fuzzel/ $XDG_CONFIG_HOME/
+ln -sfn $THEME_DIR/kitty/ $XDG_CONFIG_HOME/
+ln -sfn $THEME_DIR/niri/ $XDG_CONFIG_HOME/
+ln -sfn $THEME_DIR/yazi/ $XDG_CONFIG_HOME/
