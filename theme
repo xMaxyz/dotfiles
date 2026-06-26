@@ -90,17 +90,40 @@ callout() {
 install_configs() {
 	for content in "$COMMON_DIR"/*; do
 		if [ -d "$content" ]; then
-			content_name="${content:t}"
-			if [ -e "$CONFIG_DIR/$content_name" ]; then
-				mv "$CONFIG_DIR/$content_name" "$CONFIG_DIR/.$content_name.backup"
-				if [ $VERBALIZE ]; then callout "m" "$content_name" ".$content_name.backup"; fi
-			fi
+			local content_name="${content:t}"
+			local dest="$CONFIG_DIR/$content_name"
 
-			ln -sfn "$content" "$CONFIG_DIR/$content_name"
-			if [ $VERBALIZE ]; then callout "l" "$CONFIG_DIR/$content_name" "$content"; fi
+			# Fall 1: Am Ziel existiert bereits ein Symlink (egal ob tot oder lebendig)
+			if [ -L "$dest" ]; then
+				# -h stellt in Zsh sicher, dass der Symlink selbst gelöscht/überschrieben wird, 
+				# anstatt dem Link in den common-Ordner zu folgen
+				rm -f "$dest"
+				ln -sfn "$content" "$dest"
+				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
+
+			# Fall 2: Am Ziel existiert ein echtes, bestehendes Verzeichnis (kein Link)
+			elif [ -d "$dest" ]; then	
+				mv "$dest" "$CONFIG_DIR/.$content_name.backup"
+				if [ "$VERBALIZE" = true ]; then callout "m" "$content_name" ".$content_name.backup"; fi
+				
+				ln -sfn "$content" "$dest"
+				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
+
+			# Fall 3: Am Ziel existiert eine normale Datei (z.B. falls mal eine Datei im common-Ordner liegt)
+			elif [ -f "$dest" ]; then
+				mv "$dest" "$CONFIG_DIR/.$content_name.backup"
+				ln -sfn "$content" "$dest"
+				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
+
+			# Fall 4: Das Ziel existiert noch gar nicht (frische Installation)
+			else
+				ln -sfn "$content" "$dest"
+				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
+			fi
 		fi
 	done
 }
+
 
 apply_theme() {
 	#check if theme is specified
