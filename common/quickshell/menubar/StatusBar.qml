@@ -4,7 +4,7 @@ import Quickshell.Services.Pipewire
 import Quickshell.Services.UPower
 import Quickshell.Io
 import Quickshell.Networking
-import "../common"
+import Theme 1.0
 
 Row {
     id: root

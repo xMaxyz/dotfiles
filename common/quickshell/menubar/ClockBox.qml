@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import "../common"
+import Theme 1.0
 
 Item {
     anchors.centerIn: parent

@@ -1,4 +1,5 @@
 #!/bin/zsh
+setopt extendedglob
 
 #====================
 #=====VARIABLES======
@@ -60,13 +61,13 @@ THEME_DIR=$HOME/.dotfiles/themes/$THEME
 
 #check if config dir exists
 if [ ! -d "$CONFIG_DIR" ]; then
-	if [ $VERBALIZE ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
+	if [ $VERBALIZE = true ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
 	mkdir -p "$CONFIG_DIR"
 fi
 
 #check if working dir exists
 if [ ! -d "$WORKING_DIR" ]; then
-	if [ $VERBALIZE ]; then echo "Erstelle '$WORKING_DIR'..."; fi
+	if [ $VERBALIZE = true ]; then echo "Erstelle '$WORKING_DIR'..."; fi
 	mkdir -p "$WORKING_DIR"
 fi
 
@@ -122,6 +123,13 @@ install_configs() {
 			fi
 		fi
 	done
+	if [ -f "$COMMON_DIR/zshrc" ]; then
+		ln -sfn "$COMMON_DIR/zshrc" "$HOME/.zshrc"
+		if [ -z "$QML_IMPORT_PATH" ]; then
+			echo "export QML_IMPORT_PATH='$WORKING_DIR/quickshell:$QML_IMPORT_PATH'" >> "$COMMON_DIR/zshrc"
+		fi
+		if [ $VERBALIZE = true ]; then callout "l" "$HOME/.zshrc" "$COMMON_DIR/zshrc"; fi
+	fi
 }
 
 
@@ -139,14 +147,12 @@ apply_theme() {
 	fi
 
 	#delete old symlinks
-	for content in "$WORKING_DIR"/*(N); do #iterates through symlinks (@) and accepts an empty working dir (N)
-		if [ -e "$content" ]; then
-			rm "$content"
-			if [ $VERBALIZE ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
-		fi
+	for content in "$WORKING_DIR"/*~/current_theme(N); do #iterates through symlinks (@) and accepts an empty working dir (N)
+		rm "$content"
+		if [ $VERBALIZE ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
 	done
 
-	for content in "$THEME_DIR"/*(N); do 
+	for content in "$THEME_DIR"/*(N); do #ignore quickshell
 		if [ -d "$content" ]; then
 			#get just the name of the dir, not entire path
 			content_name="${content:t}"
@@ -161,10 +167,9 @@ apply_theme() {
 		fi
 	done
 
-	if [ -f "$THEME_DIR/zshrc" ]; then
-		ln -sfn "$THEME_DIR/zshrc" "$HOME/.zshrc"
-		if [ "$VERBALIZE" = true ]; then callout "l" ".zshrc" "$THEME_DIR/zshrc"; fi
-	fi
+	echo "$THEME" > "$WORKING_DIR/current_theme"
+
+	if [ -d "$THEME_DIR/dunst" ]; then dunstctl reload; fi
 }
 
 apply_wallpaper() {
@@ -187,20 +192,11 @@ apply_wallpaper() {
 		echo "Kein gültiges Wallpaper gefunden und kein Fallback vorhanden. Abbruch." >&2
 		exit 1
 	fi
+
+	pkill quickshell 1> /dev/null
+	quickshell 1> /dev/null &
 }
 
 if [ "$RUN_INSTALL" = true ]; then install_configs; fi
 if [ "$RUN_THEME" = true ]; then apply_theme; fi
 if [ "$RUN_WALLPAPER" = true ]; then apply_wallpaper; fi
-
-
-
-
-
-
-
-
-#zsh
-ln -sfn $THEME_DIR/zshrc $HOME/.zshrc
-
-

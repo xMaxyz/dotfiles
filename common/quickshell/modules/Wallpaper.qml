@@ -1,7 +1,7 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import "../common"
+import Theme 1.0
 
 ShellRoot {
     PanelWindow {

@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
-import "../common"
+import Theme 1.0
 import "../desktop/widgets" as Widget
 
 PanelWindow {

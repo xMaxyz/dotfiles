@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Hyprland
-import "../common"
+import Theme 1.0
 
 Rectangle {
     id: workspacebar

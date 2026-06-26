@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import "../../common"
+import Theme 1.0
 
 Rectangle {
     id: clockWidget

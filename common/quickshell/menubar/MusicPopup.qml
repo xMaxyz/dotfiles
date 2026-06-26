@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import "../common"
+import Theme 1.0
 
 PopupWindow {
     id: popupWindow

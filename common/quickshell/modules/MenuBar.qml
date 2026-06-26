@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import "../menubar" as MenuBar
-import "../common"
+import Theme 1.0
 
 ShellRoot {
 PanelWindow {
