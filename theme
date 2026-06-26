@@ -4,27 +4,48 @@
 #=====VARIABLES======
 #====================
 THEME=""
-WORKING_DIR=$HOME/.dotfiles/working/
+COMMON_DIR="$HOME/.dotfiles/common/"
+WORKING_DIR="$HOME/.dotfiles/working/"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+RUN_INSTALL=false
+RUN_THEME=false
+RUN_WALLPAPER=false
+
 
 #get parameters
-while getopts "lt:w:" opt; do
+while getopts "lit:w:" opt; do
 	case "$opt" in
 		l) 
 			ls -1 $HOME/.dotfiles/themes/
 			exit 0
 			;;
 
-		t) THEME="$OPTARG" ;;
-		w) WALLPAPER="$OPTARG" ;;
+		i)
+			RUN_INSTALL=true
+			;;
+		
+		t) 
+			THEME="$OPTARG" 
+			RUN_THEME=true
+			RUN_WALLPAPER=true
+			;;
+		
+		w) 
+			WALLPAPER="$OPTARG"
+			RUN_WALLPAPER=true
+			;;
+		
 		\?)
-			echo "Nutzung: $0 [-t theme_name] [-w wallpaper_name] [-l]"
+			echo "Nutzung: $0 [-t theme_name] [-w wallpaper_name] [-l] [-i]"
 			exit 1
 			;;
 	esac
 done
 
 THEME_DIR=$HOME/.dotfiles/themes/$THEME
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+
+
 
 
 
@@ -32,52 +53,104 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 #=====DEP CHECK======
 #====================
 
-#check if theme is specified
-if [ -z "$THEME" ]; then
-	echo "Bitte ein Theme angeben!";
-	exit 1;
-fi
-
-#check if theme exists
-if [ ! -d "$THEME_DIR" ]; then
-	echo "Theme $THEME existiert nicht!";
-	exit 1;
-fi
-
-#check if wallpaper was set and is accepted
-if [ -z "$WALLPAPER" ]; then
-	WALLPAPER="$THEME"
-elif [ ! -f "$HOME/Pictures/.wallpaper/$WALLPAPER" ]; then
-	echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zum Theme-Standard: $THEME"
-	WALLPAPER="$THEME"
+#check if config dir exists
+if [ ! -d "$CONFIG_DIR" ]; then
+	mkdir -p "$CONFIG_DIR"
 fi
 
 #check if working dir exists
 if [ ! -d "$WORKING_DIR" ]; then
-	mkdir -p $HOME/.dotfiles/working/
-fi
-
-#check if config dir exists
-if [ ! -d "$CONFIG_DIR" ]; then
-	mkdir -p $CONFIG_DIR
+	mkdir -p "$HOME/.dotfiles/working/"
 fi
 
 
 
 
 
+#====================
+#=====FUNCTIONS======
+#====================
+install_configs() {
+	for content in "$COMMON_DIR"/*; do
+		if [ -d "$content" ]; then
+			content_name="${content:t}"
+			if [ -e "$CONFIG_DIR/$content_name" ]; then
+				mv "$CONFIG_DIR/$content_name" "$CONFIG_DIR/.$content_name.backup"
+			fi
+
+			ln -sfn "$content" "$CONFIG_DIR/$content_name"
+		fi
+	done
+}
+
+apply_theme() {
+	#check if theme is specified
+	if [ -z "$THEME" ]; then
+		echo "Bitte ein Theme angeben!" >&2
+		exit 1
+	fi
+
+	#check if theme exists
+	if [ ! -d "$THEME_DIR" ]; then
+		echo "Theme $THEME existiert nicht!" >&2
+		exit 1
+	fi
+
+	#delete old symlinks
+	for content in "$WORKING_DIR"/*(N-@); do #iterates through symlinks (@) and accepts an empty working dir (N)
+		if [ -h "$content" ]; then
+			rm "$content"
+		fi
+	done
+
+	for content in "$THEME_DIR"/*; do 
+		if [ -d "$content" ]; then
+			#get just the name of the dir, not entire path
+			content_dir="${content:t}"
+			#link programm's theme dir to working dir 
+			ln -sfn "$content" "$WORKING_DIR/$content_dir"
+
+			#check if link is working, else print error in stderr
+			if [ ! -d "$WORKING_DIR/$content_dir" ]; then
+				echo "Symlink für $content_dir konnte nicht erstellt werden!" >&2
+			fi
+		fi
+	done
+}
+
+apply_wallpaper() {
+
+	#check if wallpaper is empty
+	if [[ -z "$WALLPAPER" ]]; then
+		WALLPAPER="$THEME"
+	fi
+
+	wp_file="$HOME/Pictures/.wallpaper/$WALLPAPER"
+	theme_wp_file="$HOME/Pictures/.wallpaper/$THEME"
+
+	if [[ -f "$wp_file" ]]; then
+		ln -sfn "$wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
+	elif [[ -n "$THEME" && -f "$theme_wp_file" ]]; then
+		echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zu $THEME" >&2
+		ln -sfn "$theme_wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
+	else
+		echo "Kein gültiges Wallpaper gefunden und kein Fallback vorhanden. Abbruch." >&2
+		exit 1
+	fi
+}
+
+if [ "$RUN_INSTALL" = true ]; then install_configs; fi
+if [ "$RUN_THEME" = true ]; then apply_theme; fi
+if [ "$RUN_WALLPAPER" = true ]; then apply_wallpaper; fi
 
 
-#wallpaper
-ln -sfn $HOME/Pictures/.wallpaper/$WALLPAPER $HOME/Pictures/.wallpaper/wallpaper
+
+
+
+
+
 
 #zsh
 ln -sfn $THEME_DIR/zshrc $HOME/.zshrc
 
-#normal programs
-ln -sfn $THEME_DIR/dunst/ $XDG_CONFIG_HOME/
-ln -sfn $THEME_DIR/fastfetch/ $XDG_CONFIG_HOME/
-ln -sfn $THEME_DIR/fuzzel/ $XDG_CONFIG_HOME/
-ln -sfn $THEME_DIR/kitty/ $XDG_CONFIG_HOME/
-ln -sfn $THEME_DIR/niri/ $XDG_CONFIG_HOME/
-ln -sfn $THEME_DIR/yazi/ $XDG_CONFIG_HOME/
+
