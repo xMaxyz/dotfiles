@@ -4,20 +4,25 @@
 #=====VARIABLES======
 #====================
 THEME=""
-COMMON_DIR="$HOME/.dotfiles/common/"
-WORKING_DIR="$HOME/.dotfiles/working/"
+COMMON_DIR="$HOME/.dotfiles/common"
+WORKING_DIR="$HOME/.dotfiles/working"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 RUN_INSTALL=false
 RUN_THEME=false
 RUN_WALLPAPER=false
+VERBALIZE=""
 
 
 #get parameters
-while getopts "lit:w:" opt; do
+while getopts "lvit:w:" opt; do
 	case "$opt" in
 		l) 
-			ls -1 $HOME/.dotfiles/themes/
+			ls -1 "$HOME/.dotfiles/themes/"
 			exit 0
+			;;
+
+		v)
+			VERBALIZE=true
 			;;
 
 		i)
@@ -55,12 +60,14 @@ THEME_DIR=$HOME/.dotfiles/themes/$THEME
 
 #check if config dir exists
 if [ ! -d "$CONFIG_DIR" ]; then
+	if [ $VERBALIZE ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
 	mkdir -p "$CONFIG_DIR"
 fi
 
 #check if working dir exists
 if [ ! -d "$WORKING_DIR" ]; then
-	mkdir -p "$HOME/.dotfiles/working/"
+	if [ $VERBALIZE ]; then echo "Erstelle '$WORKING_DIR'..."; fi
+	mkdir -p "$WORKING_DIR"
 fi
 
 
@@ -70,15 +77,27 @@ fi
 #====================
 #=====FUNCTIONS======
 #====================
+callout() {
+	message=""
+	case "$1" in
+		m) message="Bewege '$2' zu '$3'..." ;;
+		l) message="Linke '$2' zu '$3'..." ;;
+		r) message="Entferne '$2' in '$3'..." ;;
+	esac
+	echo "$message"
+}
+
 install_configs() {
 	for content in "$COMMON_DIR"/*; do
 		if [ -d "$content" ]; then
 			content_name="${content:t}"
 			if [ -e "$CONFIG_DIR/$content_name" ]; then
 				mv "$CONFIG_DIR/$content_name" "$CONFIG_DIR/.$content_name.backup"
+				if [ $VERBALIZE ]; then callout "m" "$content_name" ".$content_name.backup"; fi
 			fi
 
 			ln -sfn "$content" "$CONFIG_DIR/$content_name"
+			if [ $VERBALIZE ]; then callout "l" "$CONFIG_DIR/$content_name" "$content"; fi
 		fi
 	done
 }
@@ -91,31 +110,38 @@ apply_theme() {
 	fi
 
 	#check if theme exists
-	if [ ! -d "$THEME_DIR" ]; then
+	if [[ ! -d "$THEME_DIR" ]]; then
 		echo "Theme $THEME existiert nicht!" >&2
 		exit 1
 	fi
 
 	#delete old symlinks
-	for content in "$WORKING_DIR"/*(N-@); do #iterates through symlinks (@) and accepts an empty working dir (N)
-		if [ -h "$content" ]; then
+	for content in "$WORKING_DIR"/*(N); do #iterates through symlinks (@) and accepts an empty working dir (N)
+		if [ -e "$content" ]; then
 			rm "$content"
+			if [ $VERBALIZE ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
 		fi
 	done
 
-	for content in "$THEME_DIR"/*; do 
+	for content in "$THEME_DIR"/*(N); do 
 		if [ -d "$content" ]; then
 			#get just the name of the dir, not entire path
-			content_dir="${content:t}"
+			content_name="${content:t}"
 			#link programm's theme dir to working dir 
-			ln -sfn "$content" "$WORKING_DIR/$content_dir"
+			ln -sfn "$content" "$WORKING_DIR/$content_name"
+			if [ $VERBALIZE ]; then callout "l" "$content_name" "$THEME"; fi
 
 			#check if link is working, else print error in stderr
-			if [ ! -d "$WORKING_DIR/$content_dir" ]; then
+			if [ ! -d "$WORKING_DIR/$content_name" ]; then
 				echo "Symlink für $content_dir konnte nicht erstellt werden!" >&2
 			fi
 		fi
 	done
+
+	if [ -f "$THEME_DIR/zshrc" ]; then
+		ln -sfn "$THEME_DIR/zshrc" "$HOME/.zshrc"
+		if [ "$VERBALIZE" = true ]; then callout "l" ".zshrc" "$THEME_DIR/zshrc"; fi
+	fi
 }
 
 apply_wallpaper() {
@@ -130,6 +156,7 @@ apply_wallpaper() {
 
 	if [[ -f "$wp_file" ]]; then
 		ln -sfn "$wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
+		if [ $VERBALIZE ]; then callout "l" "wallpaper" "${wp_file:t}"; fi
 	elif [[ -n "$THEME" && -f "$theme_wp_file" ]]; then
 		echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zu $THEME" >&2
 		ln -sfn "$theme_wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
