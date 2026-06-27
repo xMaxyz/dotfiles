@@ -11,7 +11,7 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 RUN_INSTALL=false
 RUN_THEME=false
 RUN_WALLPAPER=false
-VERBALIZE=""
+VERBALIZE=false
 
 
 #get parameters
@@ -90,7 +90,7 @@ callout() {
 
 install_configs() {
 	for content in "$COMMON_DIR"/*; do
-		if [ -d "$content" ]; then
+		if [[ -d "$content" || -L "$content" ]]; then
 			local content_name="${content:t}"
 			local dest="$CONFIG_DIR/$content_name"
 
@@ -126,9 +126,9 @@ install_configs() {
 	if [ -f "$COMMON_DIR/zshrc" ]; then
 		ln -sfn "$COMMON_DIR/zshrc" "$HOME/.zshrc"
 		if [ -z "$QML_IMPORT_PATH" ]; then
-			echo "export QML_IMPORT_PATH='$WORKING_DIR/quickshell:$QML_IMPORT_PATH'" >> "$COMMON_DIR/zshrc"
+			echo "export QML_IMPORT_PATH='$WORKING_DIR/quickshell/common:$QML_IMPORT_PATH'" >> "$COMMON_DIR/zshrc"
 		fi
-		if [ $VERBALIZE = true ]; then callout "l" "$HOME/.zshrc" "$COMMON_DIR/zshrc"; fi
+		if [ "$VERBALIZE" = true ]; then callout "l" "$HOME/.zshrc" "$COMMON_DIR/zshrc"; fi
 	fi
 }
 
@@ -149,16 +149,16 @@ apply_theme() {
 	#delete old symlinks
 	for content in "$WORKING_DIR"/*~/current_theme(N); do #iterates through symlinks (@) and accepts an empty working dir (N)
 		rm "$content"
-		if [ $VERBALIZE ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
+		if [ "$VERBALIZE" = true ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
 	done
 
-	for content in "$THEME_DIR"/*(N); do #ignore quickshell
+	for content in "$THEME_DIR"/*(N); do
 		if [ -d "$content" ]; then
 			#get just the name of the dir, not entire path
 			content_name="${content:t}"
 			#link programm's theme dir to working dir 
 			ln -sfn "$content" "$WORKING_DIR/$content_name"
-			if [ $VERBALIZE ]; then callout "l" "$content_name" "$THEME"; fi
+			if [ "$VERBALIZE" = true ]; then callout "l" "$content_name" "$THEME"; fi
 
 			#check if link is working, else print error in stderr
 			if [ ! -d "$WORKING_DIR/$content_name" ]; then
@@ -184,7 +184,7 @@ apply_wallpaper() {
 
 	if [[ -f "$wp_file" ]]; then
 		ln -sfn "$wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
-		if [ $VERBALIZE ]; then callout "l" "wallpaper" "${wp_file:t}"; fi
+		if [ "$VERBALIZE" = true ]; then callout "l" "wallpaper" "${wp_file:t}"; fi
 	elif [[ -n "$THEME" && -f "$theme_wp_file" ]]; then
 		echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zu $THEME" >&2
 		ln -sfn "$theme_wp_file" "$HOME/Pictures/.wallpaper/wallpaper"

@@ -1,0 +1,73 @@
+[global]
+
+    monitor = 0
+    follow = mouse
+
+    width = 320
+    height = (0, 120)
+
+    origin = top-right
+    offset = (15, 15)
+
+    corner_radius = 12
+
+    frame_width = 2
+    gap_size = 8
+
+    transparency = 10
+
+    font = JetBrainsMono Nerd Font 11
+
+    background = "#131313e0"
+    foreground = "#ffffff"
+    frame_color = "#0000ff"
+
+    separator_color = frame
+
+    padding = 14
+    horizontal_padding = 14
+
+    sort = yes
+
+    idle_threshold = 120
+
+    line_height = 2
+
+    markup = full
+
+    format = "<b>%s</b>\n%b"
+
+    alignment = left
+
+    show_age_threshold = 60
+
+    word_wrap = yes
+
+    ignore_newline = no
+
+    stack_duplicates = true
+
+    hide_duplicate_count = false
+
+    show_indicators = yes
+
+
+[urgency_low]
+    timeout = 5
+    background = "#2a2a2acc"
+    foreground = "#cfcfcf"
+    frame_color = "#666666"
+
+[urgency_normal]
+    timeout = 10
+    background = "#1f2b1fcc"
+    foreground = "#ffffff"
+    frame_color = "#0000ff"
+
+[urgency_critical]
+    timeout = 0
+    background = "#2b1f1fcc"
+    foreground = "#ffffff"
+    frame_color = "#cc6666"
+
+

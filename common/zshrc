@@ -31,6 +31,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 
 
-source .dotfiles/working/zsh/prompt.zsh
+source $HOME/.dotfiles/working/zsh/prompt.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-export QML_IMPORT_PATH='/home/max/.dotfiles/working/quickshell:/home/max/.dotfiles/themes/dust/quickshell/common:'
+export QML_IMPORT_PATH='/home/max/.dotfiles/working/quickshell/common:'
