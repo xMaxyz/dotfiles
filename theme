@@ -4,51 +4,51 @@ setopt extendedglob
 #====================
 #=====VARIABLES======
 #====================
-THEME=""
+THEME="" #later set with -t option
 COMMON_DIR="$HOME/.dotfiles/common"
 WORKING_DIR="$HOME/.dotfiles/working"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
-RUN_INSTALL=false
-RUN_THEME=false
-RUN_WALLPAPER=false
-VERBALIZE=false
+RUN_INSTALL=false #used to evoke function
+RUN_THEME=false #used to evoke function
+RUN_WALLPAPER=false #used to evoke function
+VERBALIZE=false #later set with -v option, enables debug output in stdout
 
 
-#get parameters
+#get parameters to later evoke functions
 while getopts "lvit:w:" opt; do
 	case "$opt" in
-		l) 
+		l) #list available themes (dirs in $THEME_DIR)
 			ls -1 "$HOME/.dotfiles/themes/"
 			exit 0
 			;;
 
-		v)
+		v) #enables debug output
 			VERBALIZE=true
 			;;
 
-		i)
+		i) #runs install function, shouldn't be used with -t or -w 
 			RUN_INSTALL=true
 			;;
 		
-		t) 
+		t) #sets theme and automatically sets wallpaper
 			THEME="$OPTARG" 
 			RUN_THEME=true
 			RUN_WALLPAPER=true
 			;;
 		
-		w) 
+		w) #set wallpaper separately
 			WALLPAPER="$OPTARG"
 			RUN_WALLPAPER=true
 			;;
 		
-		\?)
+		\?) #error catching
 			echo "Nutzung: $0 [-t theme_name] [-w wallpaper_name] [-l] [-i]"
 			exit 1
 			;;
 	esac
 done
 
-THEME_DIR=$HOME/.dotfiles/themes/$THEME
+THEME_DIR=$HOME/.dotfiles/themes/$THEME #set theme dir if -t is used
 
 
 
@@ -59,13 +59,13 @@ THEME_DIR=$HOME/.dotfiles/themes/$THEME
 #=====DEP CHECK======
 #====================
 
-#check if config dir exists
+#check if config dir exists and create it if not
 if [ ! -d "$CONFIG_DIR" ]; then
 	if [ $VERBALIZE = true ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
 	mkdir -p "$CONFIG_DIR"
 fi
 
-#check if working dir exists
+#check if working dir exists and create it if not
 if [ ! -d "$WORKING_DIR" ]; then
 	if [ $VERBALIZE = true ]; then echo "Erstelle '$WORKING_DIR'..."; fi
 	mkdir -p "$WORKING_DIR"
@@ -78,54 +78,53 @@ fi
 #====================
 #=====FUNCTIONS======
 #====================
+#function to print debug output when -v is used
 callout() {
 	message=""
 	case "$1" in
-		m) message="Bewege '$2' zu '$3'..." ;;
-		l) message="Linke '$2' zu '$3'..." ;;
-		r) message="Entferne '$2' in '$3'..." ;;
+		m) message="Bewege '$2' zu '$3'..." ;; #used when creating backup during install
+		l) message="Linke '$2' zu '$3'..." ;; #used when creating symlinks
+		r) message="Entferne '$2' in '$3'..." ;; #used when removing symlinks in the working dir
 	esac
 	echo "$message"
 }
 
+#function to create symlinks in XDG_CONFIG_HOME (or any other config dir) to its corresponding config dir in COMMON_DIR
 install_configs() {
-	for content in "$COMMON_DIR"/*; do
-		if [[ -d "$content" || -L "$content" ]]; then
-			local content_name="${content:t}"
-			local dest="$CONFIG_DIR/$content_name"
+	for content in "$COMMON_DIR"/*; do #iterate through every item in COMMON_DIR
+		if [[ -d "$content" || -L "$content" ]]; then #filter for dirs and symlinks
+			local content_name="${content:t}" #strip away the path and only leave the bare name using :t
+			local dest="$CONFIG_DIR/$content_name" #set path for symlink in CONFIG_DIR (e.g. ~/.config)
 
-			# Fall 1: Am Ziel existiert bereits ein Symlink (egal ob tot oder lebendig)
-			if [ -L "$dest" ]; then
-				# -h stellt in Zsh sicher, dass der Symlink selbst gelöscht/überschrieben wird, 
-				# anstatt dem Link in den common-Ordner zu folgen
-				rm -f "$dest"
-				ln -sfn "$content" "$dest"
+			#check for different possible states of an already existing config in CONFIG_DIR and get rid of it properly
+			if [ -L "$dest" ]; then #check if there is already a symlink
+				rm -f "$dest" #remove old link to prevent the new one from being created inside of it
+				ln -sfn "$content" "$dest" #create new symlink in CONFIG_DIR
 				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
 
-			# Fall 2: Am Ziel existiert ein echtes, bestehendes Verzeichnis (kein Link)
-			elif [ -d "$dest" ]; then	
-				mv "$dest" "$CONFIG_DIR/.$content_name.backup"
+			elif [ -d "$dest" ]; then #check if there is already a dir with that name
+				mv "$dest" "$CONFIG_DIR/.$content_name.backup" #rename it
 				if [ "$VERBALIZE" = true ]; then callout "m" "$content_name" ".$content_name.backup"; fi
-				
 				ln -sfn "$content" "$dest"
 				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
 
-			# Fall 3: Am Ziel existiert eine normale Datei (z.B. falls mal eine Datei im common-Ordner liegt)
-			elif [ -f "$dest" ]; then
-				mv "$dest" "$CONFIG_DIR/.$content_name.backup"
+			elif [ -f "$dest" ]; then #check if there is a single file with that name
+				mv "$dest" "$CONFIG_DIR/.$content_name.backup" #rename it just like a dir above
 				ln -sfn "$content" "$dest"
 				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
 
-			# Fall 4: Das Ziel existiert noch gar nicht (frische Installation)
-			else
+			else #nothing exists, just create the link
 				ln -sfn "$content" "$dest"
 				if [ "$VERBALIZE" = true ]; then callout "l" "$dest" "$content"; fi
 			fi
 		fi
 	done
-	if [ -f "$COMMON_DIR/zshrc" ]; then
+	
+	#handling zshrc
+	if [ -f "$COMMON_DIR/zshrc" ]; then #check if there is a zshrc in COMMON_DIR and link it to ~/.zshrc
 		ln -sfn "$COMMON_DIR/zshrc" "$HOME/.zshrc"
-		if [ -z "$QML_IMPORT_PATH" ]; then
+		
+		if [ -z "$QML_IMPORT_PATH" ]; then #if empty, put variable declaration into zshrc for QML to work properly
 			echo "export QML_IMPORT_PATH='$WORKING_DIR/quickshell/common:$QML_IMPORT_PATH'" >> "$COMMON_DIR/zshrc"
 		fi
 		if [ "$VERBALIZE" = true ]; then callout "l" "$HOME/.zshrc" "$COMMON_DIR/zshrc"; fi
@@ -133,6 +132,7 @@ install_configs() {
 }
 
 
+#function to apply an existing theme by creating new symlinks from $THEME_DIR to $WORKING_DIR
 apply_theme() {
 	#check if theme is specified
 	if [ -z "$THEME" ]; then
@@ -147,13 +147,13 @@ apply_theme() {
 	fi
 
 	#delete old symlinks
-	for content in "$WORKING_DIR"/*~/current_theme(N); do #iterates through symlinks (@) and accepts an empty working dir (N)
+	for content in "$WORKING_DIR"/*~/current_theme(N); do #iterates through every item but current_theme
 		rm "$content"
 		if [ "$VERBALIZE" = true ]; then callout "r" "${content:t}" "$WORKING_DIR"; fi
 	done
 
-	for content in "$THEME_DIR"/*(N); do
-		if [ -d "$content" ]; then
+	for content in "$THEME_DIR"/*(N); do #iterate through every item in theme dir to only create symlinks for programs with an actual theme
+		if [ -d "$content" ]; then #only iterate through dirs
 			#get just the name of the dir, not entire path
 			content_name="${content:t}"
 			#link programm's theme dir to working dir 
@@ -167,36 +167,44 @@ apply_theme() {
 		fi
 	done
 
-	echo "$THEME" > "$WORKING_DIR/current_theme"
+	echo "$THEME" > "$WORKING_DIR/current_theme" #print current theme into current_theme
 
-	if [ -d "$THEME_DIR/dunst" ]; then dunstctl reload; fi
+	if [ -d "$THEME_DIR/dunst" ]; then dunstctl reload; fi #reload dunst if there's a config in the THEME_DIR
 }
 
+#function to apply wallpaper
+#wallpapers are located in ~/Pictures/.wallpaper
+#in said dir there should be wallpapers with the exact name of a theme for every theme
+#there may be additional wallpapers with different names
+#if this function gets evoked a symlink in that very dir called "wallpaper" is created, pointing towards one wallpaper in that dir.
+#every program that uses the current wallpaper should have ~/Pictures/.wallpaper/wallpaper as a source. The switching of wallpapers is managed by this function down below. 
 apply_wallpaper() {
 
-	#check if wallpaper is empty
+	#check if wallpaper is empty and set it to match the theme if so
 	if [[ -z "$WALLPAPER" ]]; then
 		WALLPAPER="$THEME"
 	fi
 
-	wp_file="$HOME/Pictures/.wallpaper/$WALLPAPER"
-	theme_wp_file="$HOME/Pictures/.wallpaper/$THEME"
+	wp_file="$HOME/Pictures/.wallpaper/$WALLPAPER" #set path of desired wallpaper
+	theme_wp_file="$HOME/Pictures/.wallpaper/$THEME" #set path of specified theme using -t
 
-	if [[ -f "$wp_file" ]]; then
+	if [[ -f "$wp_file" ]]; then #check if desired wallpaper exists and set it
 		ln -sfn "$wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
 		if [ "$VERBALIZE" = true ]; then callout "l" "wallpaper" "${wp_file:t}"; fi
-	elif [[ -n "$THEME" && -f "$theme_wp_file" ]]; then
+	elif [[ -n "$THEME" && -f "$theme_wp_file" ]]; then #check if the optionally specified theme exists and has a matching wallpaper
 		echo "Wallpaper '$WALLPAPER' existiert nicht. Fallback zu $THEME" >&2
 		ln -sfn "$theme_wp_file" "$HOME/Pictures/.wallpaper/wallpaper"
-	else
+	else #fallback if there's neither a matching wallpaper nor a standard theme
 		echo "Kein gültiges Wallpaper gefunden und kein Fallback vorhanden. Abbruch." >&2
 		exit 1
 	fi
 
+	#reload quickshell to make changed wallpaper take effect
 	pkill quickshell 1> /dev/null
 	quickshell 1> /dev/null &
 }
 
+#evoke functions to install, or apply the wallpaper or theme. 
 if [ "$RUN_INSTALL" = true ]; then install_configs; fi
 if [ "$RUN_THEME" = true ]; then apply_theme; fi
 if [ "$RUN_WALLPAPER" = true ]; then apply_wallpaper; fi
