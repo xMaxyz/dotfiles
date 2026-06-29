@@ -5,17 +5,20 @@ setopt extendedglob
 #=====VARIABLES======
 #====================
 THEME="" #later set with -t option
+NEW_THEME=""
 COMMON_DIR="$HOME/.dotfiles/common"
 WORKING_DIR="$HOME/.dotfiles/working"
+TEMPLATE_DIR="$HOME/.dotfiles/templates"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 RUN_INSTALL=false #used to evoke function
+CREATE_THEME=false
 RUN_THEME=false #used to evoke function
 RUN_WALLPAPER=false #used to evoke function
 VERBALIZE=false #later set with -v option, enables debug output in stdout
 
 
 #get parameters to later evoke functions
-while getopts "lvit:w:" opt; do
+while getopts "lvit:w:c:" opt; do
 	case "$opt" in
 		l) #list available themes (dirs in $THEME_DIR)
 			ls -1 "$HOME/.dotfiles/themes/"
@@ -40,6 +43,11 @@ while getopts "lvit:w:" opt; do
 			WALLPAPER="$OPTARG"
 			RUN_WALLPAPER=true
 			;;
+
+		c) #creates new theme and copies theme templates
+			NEW_THEME="$OPTARG"
+			CREATE_THEME=true
+			;;
 		
 		\?) #error catching
 			echo "Nutzung: $0 [-t theme_name] [-w wallpaper_name] [-l] [-i]"
@@ -61,13 +69,13 @@ THEME_DIR=$HOME/.dotfiles/themes/$THEME #set theme dir if -t is used
 
 #check if config dir exists and create it if not
 if [ ! -d "$CONFIG_DIR" ]; then
-	if [ $VERBALIZE = true ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
+	if [ "$VERBALIZE = true" ]; then echo "Erstelle '$CONFIG_DIR'..."; fi
 	mkdir -p "$CONFIG_DIR"
 fi
 
 #check if working dir exists and create it if not
 if [ ! -d "$WORKING_DIR" ]; then
-	if [ $VERBALIZE = true ]; then echo "Erstelle '$WORKING_DIR'..."; fi
+	if [ "$VERBALIZE = true" ]; then echo "Erstelle '$WORKING_DIR'..."; fi
 	mkdir -p "$WORKING_DIR"
 fi
 
@@ -85,6 +93,7 @@ callout() {
 		m) message="Bewege '$2' zu '$3'..." ;; #used when creating backup during install
 		l) message="Linke '$2' zu '$3'..." ;; #used when creating symlinks
 		r) message="Entferne '$2' in '$3'..." ;; #used when removing symlinks in the working dir
+		c) message="Kopiere '$2' in '$3'..." ;; #used when copying templates into new theme dir
 	esac
 	echo "$message"
 }
@@ -132,6 +141,26 @@ install_configs() {
 }
 
 
+#function to create a new theme quickly. it creates a new dir in ~/.dotfiles/themes/ and copies programm templates from ~/.dotfiles/templates
+create_theme() {
+	if [ -z "$NEW_THEME" ]; then #check if given theme name is valid
+		echo "Kein gültiger Name angegeben. Abbruch." >&2
+		exit 1
+	fi
+
+	#create new theme dir in ~/.dotfiles/themes
+	mkdir -p "$HOME"/.dotfiles/themes/"$NEW_THEME"
+
+	#iterate through TEMPLATE_DIR and copy folders into the name theme dir
+	for content in "$TEMPLATE_DIR"/*; do
+		if [ -d "$content" ]; then
+			content_name=${content:t}
+			cp -r "$content" "$HOME/.dotfiles/themes/$NEW_THEME/"
+			if [ "$VERBALIZE" = true ]; then callout "c" "$content_name" "$NEW_THEME"; fi
+		fi
+	done
+}
+
 #function to apply an existing theme by creating new symlinks from $THEME_DIR to $WORKING_DIR
 apply_theme() {
 	#check if theme is specified
@@ -162,7 +191,7 @@ apply_theme() {
 
 			#check if link is working, else print error in stderr
 			if [ ! -d "$WORKING_DIR/$content_name" ]; then
-				echo "Symlink für $content_dir konnte nicht erstellt werden!" >&2
+				echo "Symlink für $content_name konnte nicht erstellt werden!" >&2
 			fi
 		fi
 	done
@@ -206,5 +235,6 @@ apply_wallpaper() {
 
 #evoke functions to install, or apply the wallpaper or theme. 
 if [ "$RUN_INSTALL" = true ]; then install_configs; fi
+if [ "$CREATE_THEME" = true ]; then create_theme; fi
 if [ "$RUN_THEME" = true ]; then apply_theme; fi
 if [ "$RUN_WALLPAPER" = true ]; then apply_wallpaper; fi
