@@ -152,7 +152,7 @@ create_theme() {
 	mkdir -p "$HOME"/.dotfiles/themes/"$NEW_THEME"
 
 	#iterate through TEMPLATE_DIR and copy folders into the name theme dir
-	for content in "$TEMPLATE_DIR"/*; do
+	for content in "$TEMPLATE_DIR"/*(N); do
 		if [ -d "$content" ]; then
 			content_name=${content:t}
 			cp -r "$content" "$HOME/.dotfiles/themes/$NEW_THEME/"

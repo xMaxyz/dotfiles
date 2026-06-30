@@ -1,0 +1,73 @@
+[global]
+
+    monitor = 0
+    follow = mouse
+
+    width = int
+    height = (int, int)
+
+    origin = top-right
+    offset = (int, int)
+
+    corner_radius = int
+
+    frame_width = int
+    gap_size = int
+
+    transparency = int
+
+    font = string
+
+    background = "#"
+    foreground = "#"
+    frame_color = "#"
+
+    separator_color = frame
+
+    padding = int
+    horizontal_padding = int
+
+    sort = yes/no
+
+    idle_threshold = int
+
+    line_height = int
+
+    markup = full
+
+    format = "<b>%s</b>\n%b"
+
+    alignment = left
+
+    show_age_threshold = int
+
+    word_wrap = yes/no
+
+    ignore_newline = no/yes
+
+    stack_duplicates = true/false
+
+    hide_duplicate_count = false/true
+
+    show_indicators = yes/no
+
+
+[urgency_low]
+    timeout = 5
+    background = "#"
+    foreground = "#"
+    frame_color = "#"
+
+[urgency_normal]
+    timeout = int
+    background = "#"
+    foreground = "#"
+    frame_color = "#"
+
+[urgency_critical]
+    timeout = int
+    background = "#"
+    foreground = "#"
+    frame_color = "#"
+
+
